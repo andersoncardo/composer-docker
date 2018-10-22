@@ -1,0 +1,92 @@
+version: '2'
+networks: {}
+volumes:
+  webjumpdev-mysql-volume:
+    external: true
+
+services:
+  db:
+    image: percona
+    volumes:
+      - ./conf.d/mysql:/etc/mysql/conf.d:ro
+      - webjumpdev-mysql-volume:/var/lib/mysql:rw
+    environment:
+      - MYSQL_ROOT_PASSWORD
+    network_mode: bridge
+    ports:
+      - 127.0.0.1:3306:3306
+
+  mailcatch:
+    image: mailhog/mailhog
+    network_mode: bridge
+
+  php70:
+    build:
+      context: build/dist/php70
+    links:
+      - db
+      - mailcatch
+      - redis
+    network_mode: bridge
+    environment:
+      - GROUPID
+      - USERID
+  php56:
+    build:
+      context: build/dist/php56
+    links:
+      - db
+      - mailcatch
+      - redis
+    network_mode: bridge
+    environment:
+      - GROUPID
+      - USERID
+  php71:
+    build:
+      context: build/dist/php71
+    links:
+      - db
+      - mailcatch
+      - redis
+    network_mode: bridge
+    environment:
+      - GROUPID
+      - USERID
+  php72:
+    build:
+      context: build/dist/php72
+    links:
+      - db
+      - mailcatch
+      - redis
+    network_mode: bridge
+    environment:
+      - GROUPID
+      - USERID
+
+  redis:
+    image: redis:alpine
+    network_mode: bridge
+
+  web:
+    build:
+      context: build/dist/web
+    environment:
+      - DOMAINSUFFIX
+    links:
+      - mailcatch
+      - php70:fpm
+      - php70:fpm70
+      - php56:fpm56
+      - php71:fpm71
+      - php72:fpm72
+    network_mode: bridge
+  ssl:
+    build:
+      context: build/dist/ssl
+    ports:
+        - "127.0.0.1:80:80"
+        - "127.0.0.1:443:443"
+    network_mode: bridge
+
