@@ -6,4 +6,16 @@
 /docker-custom.yml
 /conf
 /.env
+/.idea/*
 
+
+#--------------------------#
+# IDE Project Files/Folder #
+#--------------------------#
+/nbproject/
+/.idea/*
+./idea
+.idea/vcs.xml
+/.phpintel/
+
+.idea/dockerdev.iml

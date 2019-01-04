@@ -23,7 +23,7 @@ setup() {
         if [ -z "`docker volume ls -q -f 'name=webjumpdev-mysql-volume'`" ]; then
             echo 'Create a persistant database volume in '${DEV_WORKPATH}'/mysql';
             mkdir -p ${DEV_WORKPATH}/mysql
-            docker volume create -o 'type=none' -o 'device='${DEV_WORKPATH}'/mysql' -o 'o=bind' webjumpdev-mysql-volume
+            docker volume create -o 'type=none' -o 'device=${DEV_WORKPATH}/mysql' -o 'o=bind' webjumpdev-mysql-volume
 
         fi
 
