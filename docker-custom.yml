@@ -1,0 +1,47 @@
+version: '2'
+services:
+  php70:
+    links:
+    - elasticsearch
+  php71:
+    links:
+    - elasticsearch
+  php72:
+    links:
+    - elasticsearch
+  php56:
+    links:
+    - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.2
+    environment:
+    - SERVER_NAME=kibana.local
+    - ELASTICSEARCH_URL=http://elasticsearch:9200/
+    - ELASTICSEARCH_HOST=elasticsearch
+    - ELASTICSEARCH_PASSWD=admin
+    - ELASTICSEARCH_USERNAME=admin
+    - ELASTICSEARCH_PORT=9200
+    ports:
+    - 5601:5601
+    links:
+    - elasticsearch
+    depends_on:
+    - elasticsearch
+    network_mode: bridge
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - ELASTIC_PASSWORD=admin
+      - ELASTIC_USERNAME=admin
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+    - 9200:9200
+    network_mode: bridge
