@@ -82,6 +82,8 @@ services:
       - php71:fpm71
       - php72:fpm72
     network_mode: bridge
+    ports:
+      - 3000:3000
   ssl:
     build:
       context: build/dist/ssl
